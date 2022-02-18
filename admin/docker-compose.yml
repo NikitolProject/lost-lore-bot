@@ -1,0 +1,36 @@
+version: "3.3"
+
+services:
+  django:
+    build: .
+    command: python manage.py runserver 0.0.0.0:9000
+    # command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "${APP_PORT:-8080}:8000"
+    volumes:
+      - .:/home/admin/web
+      - static_volume:/home/admin/static
+    networks:
+      - database-admin
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "${NGINX_PORT:-80}:80"
+    depends_on:
+      - django
+    links:
+      - django
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/.admin.passwd:/etc/nginx/.admin.passwd
+      - static_volume:/home/admin/static
+    networks:
+      - database-admin
+
+volumes:
+  static_volume:
+
+networks:
+  database-admin:
+    driver: bridge

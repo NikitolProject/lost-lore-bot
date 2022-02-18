@@ -1,0 +1,7 @@
+discord.py==1.7.3
+discord-py-interactions==4.0.2
+django==4.0.2
+psycopg2-binary==2.9.3
+pony==0.7.16
+python-dotenv==0.19.2
+gunicorn==20.1.0
